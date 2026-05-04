@@ -101,8 +101,12 @@ function setupUpload() {
       ph.classList.add('hidden');
       prev.classList.remove('hidden');
       area.classList.add('has-img');
-    } catch {
-      showError('無法讀取圖片，請換一張試試');
+    } catch (err) {
+      if (err.message === 'heic-unsupported') {
+        showError('無法讀取此圖片格式。請在相機 App 拍照後直接選取，或先將 HEIC 轉存為 JPG 再上傳。');
+      } else {
+        showError('無法讀取圖片，請換一張試試');
+      }
     }
   }
 
@@ -127,7 +131,7 @@ function resizeToBase64(file, maxPx) {
       URL.revokeObjectURL(url);
       resolve(canvas.toDataURL('image/jpeg', 0.85));
     };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('load failed')); };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('heic-unsupported')); };
     img.src = url;
   });
 }
