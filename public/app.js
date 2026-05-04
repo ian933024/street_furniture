@@ -462,8 +462,7 @@ function setVgenHint(msg) {
 
 function buildVideoPrompt() {
   const location = S.txtLocation.trim();
-  const users    = S.txtUsers.trim();
-  return `A realistic street scene showing ${S.txtFurniture.trim() || 'a street furniture piece'} installed in ${location || 'an urban environment'}. ${users || 'People'} are naturally using and enjoying the furniture. Lifelike movement — people walking by, sitting down, interacting. Camera slowly pans across the scene. Warm natural daylight, realistic outdoor setting.`;
+  return `Cinematic wide establishing shot. ${S.txtFurniture.trim() || 'A street furniture piece'} installed in ${location || 'an urban environment'}. Camera slowly pans across the scene. Pedestrians and passersby move naturally in the background, small in frame. Warm natural daylight, realistic outdoor setting, architectural visualization style, no close-up faces.`;
 }
 
 async function pollVeo(operationName) {
