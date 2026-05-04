@@ -476,9 +476,17 @@ async function pollVeo(operationName) {
     const data = await res.json();
     setVgenHint(`Veo 生成中，已等待 ${(i + 1) * 10} 秒…`);
     if (data.done) {
-      const uri = data.response?.generateVideoResponse
-        ?.generatedSamples?.[0]?.video?.uri;
-      if (!uri) throw new Error('無法取得影片網址');
+      console.log('[Veo done]', JSON.stringify(data));
+      const samples = data.response?.generateVideoResponse?.generatedSamples;
+      const uri = samples?.[0]?.video?.uri;
+      if (!uri) {
+        // Safety filter: samples array exists but video is null/blocked
+        if (Array.isArray(samples) && samples.length > 0 && !samples[0]?.video?.uri) {
+          throw new Error('影片被 Veo 安全過濾器封鎖。請嘗試修改設計描述，或確認圖片中沒有人臉特寫。');
+        }
+        // Empty samples — generation failed silently
+        throw new Error(`影片生成失敗（回應格式異常）。請開啟開發者工具查看 Console 中的 [Veo done] 訊息並回報。`);
+      }
       return uri;
     }
     if (data.error) throw new Error(data.error.message || '影片生成失敗');
