@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>街道家具設計視覺化</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ── 步驟指示器 ── -->
+  <div id="step-indicator" class="step-indicator hidden">
+    <div class="step-row">
+      <div class="step-item" data-step="1">
+        <div class="step-circle">1</div>
+        <span class="step-label">上傳照片</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item" data-step="2">
+        <div class="step-circle">2</div>
+        <span class="step-label">設定細節</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item" data-step="3">
+        <div class="step-circle">3</div>
+        <span class="step-label">生成圖片</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item" data-step="4">
+        <div class="step-circle">4</div>
+        <span class="step-label">查看成果</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       畫面 1：上傳照片
+  ════════════════════════════════════════ -->
+  <div id="screen-upload" class="screen active">
+    <div class="screen-head">
+      <h2>上傳作品照片</h2>
+      <p class="screen-sub">拍攝或選擇你的手作街道家具模型</p>
+    </div>
+
+    <div id="upload-area" class="upload-area">
+      <input type="file" id="file-input" accept="image/*" class="visually-hidden">
+
+      <div id="upload-placeholder" class="upload-placeholder">
+        <div class="up-icon">📷</div>
+        <p class="up-text">點擊上傳 / 直接拍照</p>
+        <p class="up-hint">支援 JPG、PNG、HEIC</p>
+      </div>
+
+      <div id="upload-preview" class="upload-preview hidden">
+        <img id="preview-img" src="" alt="預覽圖">
+        <button id="btn-change-photo" class="btn-change">更換照片</button>
+      </div>
+    </div>
+
+    <div class="upload-btn-row">
+      <button id="btn-camera" class="btn-secondary btn-lg">
+        📷&nbsp; 拍照
+      </button>
+      <button id="btn-gallery" class="btn-secondary btn-lg">
+        🖼️&nbsp; 從相簿選擇
+      </button>
+    </div>
+
+    <p class="upload-note">
+      💡 沒有照片也可以繼續，但上傳照片能讓 AI 更準確呈現你的設計
+    </p>
+
+    <div class="screen-footer">
+      <div></div>
+      <button class="btn-primary btn-lg" id="btn-upload-next">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       畫面 2：設定細節
+  ════════════════════════════════════════ -->
+  <div id="screen-details" class="screen">
+    <div class="screen-head">
+      <h2>設定作品細節</h2>
+      <p class="screen-sub">讓 AI 更了解你的設計</p>
+    </div>
+
+    <div class="details-scroll">
+
+      <div class="form-card">
+        <label class="form-label" for="txt-furniture">
+          我們的街道家具是 <span class="req">*</span>
+        </label>
+        <textarea id="txt-furniture" class="text-input ta"
+          placeholder="例如：一個可以坐下休息的公園椅，有弧形靠背和兩個扶手，整體形狀像一片葉子…"
+          rows="3"></textarea>
+      </div>
+
+      <div class="form-card">
+        <label class="form-label" for="txt-problem">
+          設計這個家具是想要解決什麼問題
+        </label>
+        <textarea id="txt-problem" class="text-input ta"
+          placeholder="例如：公園缺乏有遮蔭的休憩空間，夏天很難在戶外久待…"
+          rows="3"></textarea>
+      </div>
+
+      <div class="form-card">
+        <label class="form-label" for="txt-location">
+          我想要把這個街道家具放在哪裡 <span class="req">*</span>
+        </label>
+        <textarea id="txt-location" class="text-input ta"
+          placeholder="例如：學校操場旁邊、公園入口附近的人行道上、捷運站出口廣場…"
+          rows="2"></textarea>
+      </div>
+
+      <div class="form-card">
+        <label class="form-label" for="txt-users">
+          使用的受眾是
+        </label>
+        <textarea id="txt-users" class="text-input ta"
+          placeholder="例如：國小學生、放學後等待家長的孩子、喜歡在公園散步的銀髮族…"
+          rows="2"></textarea>
+      </div>
+
+      <div class="form-card">
+        <label class="form-label" for="txt-other">
+          其他文字說明
+        </label>
+        <textarea id="txt-other" class="text-input ta"
+          placeholder="例如：使用竹材製作、主要顏色是橘色、夜晚會發光、旁邊有小植栽…"
+          rows="2"></textarea>
+      </div>
+
+    </div><!-- /details-scroll -->
+
+    <div class="screen-footer">
+      <button class="btn-ghost" id="btn-details-back">← 返回</button>
+      <button class="btn-primary btn-lg" id="btn-generate">✨ 開始生成</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       畫面 3：生成中
+  ════════════════════════════════════════ -->
+  <div id="screen-generating" class="screen">
+    <div class="gen-wrap">
+      <div class="gen-anim">
+        <div class="spinner-ring"></div>
+        <div class="spinner-icon">🎨</div>
+      </div>
+      <h2 id="gen-title">正在生成中…</h2>
+      <p id="gen-status" class="gen-status">請稍候，約需 20–40 秒</p>
+
+      <div class="gen-steps">
+        <div class="gen-step" id="gstep-1">
+          <span class="gstep-icon">🖼️</span>
+          <span class="gstep-label">準備參考資料</span>
+          <span class="gstep-badge">等待中</span>
+        </div>
+        <div class="gen-step" id="gstep-2">
+          <span class="gstep-icon">🧠</span>
+          <span class="gstep-label">構建設計提案</span>
+          <span class="gstep-badge">等待中</span>
+        </div>
+        <div class="gen-step" id="gstep-3">
+          <span class="gstep-icon">🖼️</span>
+          <span class="gstep-label">生成情境圖片</span>
+          <span class="gstep-badge">等待中</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       畫面 4：影片生成中
+  ════════════════════════════════════════ -->
+  <div id="screen-vgen" class="screen">
+    <div class="gen-wrap">
+      <div class="gen-anim">
+        <div class="spinner-ring purple"></div>
+        <div class="spinner-icon">🎬</div>
+      </div>
+      <h2>正在生成影片…</h2>
+      <p class="gen-status">Veo 3.1 生成中，約需 30 秒至 6 分鐘，請耐心等候</p>
+      <div class="vprogress-wrap">
+        <div class="vprogress-bar" id="vprogress"></div>
+      </div>
+      <p id="vgen-hint" class="gen-status" style="margin-top:12px;font-size:14px;"></p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       畫面 5：成果（圖片 + 影片）
+  ════════════════════════════════════════ -->
+  <div id="screen-result" class="screen">
+    <div class="screen-head">
+      <h2>✨ 生成完成！</h2>
+      <p class="screen-sub">你的街道家具設計提案</p>
+    </div>
+
+    <!-- 圖片 + 影片並排容器 -->
+    <div id="result-media" class="result-media">
+
+      <div class="result-media-col">
+        <p class="media-col-label">🖼️ 情境圖片</p>
+        <div class="result-img-wrap">
+          <img id="result-img" src="" alt="生成結果">
+        </div>
+      </div>
+
+      <div id="result-video-col" class="result-media-col hidden">
+        <p class="media-col-label">🎬 情境影片</p>
+        <div class="result-video-wrap">
+          <video id="result-video" controls playsinline>
+            <source id="result-video-src" src="" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+    </div><!-- /result-media -->
+
+    <div id="result-tags" class="result-tags"></div>
+
+    <!-- 主要 CTA：生成影片 → 完成後換成上傳作品 -->
+    <div id="result-video-action" class="result-main-action">
+      <button class="btn-video btn-xl" id="btn-gen-video">🎬&nbsp; 生成影片</button>
+    </div>
+    <div id="result-upload-row" class="result-main-action hidden">
+      <button class="btn-upload btn-xl" id="btn-upload-work">📤&nbsp; 上傳作品</button>
+    </div>
+
+    <!-- 次要功能：小字按鈕 -->
+    <div class="result-secondary">
+      <button class="btn-sm-ghost" id="btn-download">⬇️ 下載圖片</button>
+      <button class="btn-sm-ghost hidden" id="btn-dl-video">⬇️ 下載影片</button>
+      <button class="btn-sm-ghost" id="btn-regen">🔄 重新生成</button>
+      <button class="btn-sm-ghost" id="btn-new">＋ 新作品</button>
+    </div>
+
+  </div>
+
+  <!-- ── 上傳作品 Modal ── -->
+  <div id="upload-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>📤 上傳作品到展示牆</h3>
+        <p>老師可以在展示牆看到所有組別的成果</p>
+      </div>
+      <label class="form-label" for="group-name-input">你們的組別名稱</label>
+      <input id="group-name-input" class="text-input" type="text"
+        placeholder="例如：第三組、青草設計隊…" maxlength="30" autocomplete="off">
+      <div id="modal-upload-progress" class="modal-progress hidden">
+        <div class="modal-progress-bar" id="modal-progress-fill"></div>
+      </div>
+      <p id="modal-status" class="modal-status"></p>
+      <div class="modal-actions">
+        <button id="btn-modal-cancel" class="btn-ghost">取消</button>
+        <button id="btn-modal-confirm" class="btn-primary btn-lg">✓&nbsp; 確認上傳</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 錯誤提示 Toast ── -->
+  <div id="toast" class="toast hidden">
+    <span class="toast-icon">⚠️</span>
+    <span id="toast-msg">發生錯誤</span>
+    <button id="toast-close">✕</button>
+  </div>
+
+</div><!-- /#app -->
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

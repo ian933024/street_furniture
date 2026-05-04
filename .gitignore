@@ -1,0 +1,8 @@
+node_modules/
+.firebase/
+.DS_Store
+.claude/
+firebase.js
+
+# API keys — fill in your own values, do not commit
+public/config.js
