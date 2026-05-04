@@ -227,19 +227,22 @@ function buildPromptWithImage() {
     other   && `Additional notes: ${other}`,
   ].filter(Boolean).join('\n');
 
-  return `The reference image shows a student-made handcraft model of a street furniture piece: ${S.txtFurniture.trim()}.
+  return `The reference image shows a street furniture piece designed and handcrafted by Taiwanese students: ${S.txtFurniture.trim()}.
 
-TASK: Create a photorealistic urban design visualization of this exact furniture at full human scale.
+TASK: Create a photorealistic urban design visualization showing this furniture installed at full human scale in its intended real-world environment.
 
-PRESERVE EXACTLY from the reference image:
-- The furniture's complete shape, silhouette, proportions, and all structural elements
-- Every distinctive design feature, curve, component, and visual character as shown in the photo
-- Do NOT redesign, simplify, beautify, or alter ANY aspect of the furniture
+BACKGROUND TREATMENT:
+- If the reference image contains a hand-drawn or sketched background (pencil lines, marker strokes, rough illustrated scenery), replace that background entirely with a realistic photographic ${location} environment.
+- If the background is already a real photo or plain surface, simply place the furniture in a realistic ${location} setting.
 
-CHANGE ONLY:
-- Replace the background with a realistic ${location} outdoor environment
-- Show the furniture as a real, full-scale installed street piece
-- Add 2–3 people (${users || 'general public'}) naturally using and enjoying it
+FURNITURE TREATMENT — preserve the student's design with light functional polish:
+- Keep the overall shape, silhouette, structural concept, and all distinctive design features as shown in the photo.
+- Do NOT redesign, add new components, or change the fundamental form or intent.
+- Apply only minimal functional refinements to make it look usable at human scale: if a seating surface appears uneven, smooth it slightly; close obvious construction gaps if needed for realism. All intentional design choices must remain intact.
+
+SCENE:
+- Show the furniture as a full-scale installed piece in a realistic ${location}.
+- Add 2–3 people (${users || 'general public'}) naturally using and enjoying it.
 ${context ? '\n' + context : ''}
 
 Style: photorealistic architectural design proposal photograph, warm natural daylight, realistic shadows, wide-angle composition, professional urban photography.`;
@@ -256,16 +259,16 @@ function buildPromptTextOnly() {
     other   && `Additional notes: ${other}`,
   ].filter(Boolean).join('\n');
 
-  return `Photorealistic urban design visualization photograph.
+  return `Photorealistic urban design visualization photograph. This is a street furniture concept designed by Taiwanese students.
 
-Street furniture design to reproduce exactly:
+Street furniture to visualize:
 ${S.txtFurniture.trim()}
 
 Scene requirements:
 - Location: ${location}
-- Show the furniture at full human scale as a real installed piece in its environment
-- Add 2–3 people (${users || 'general public'}) naturally using and interacting with it
-- Preserve every described design detail faithfully — do not simplify or alter the furniture
+- Show the furniture at full human scale as a real installed piece in its environment.
+- Reproduce the described design faithfully. Apply only minimal refinements to make it look functional and usable — do not redesign or add features not described.
+- Add 2–3 people (${users || 'general public'}) naturally using and interacting with it.
 ${context ? '\n' + context : ''}
 
 Style: professional architectural design proposal, warm natural daylight, realistic shadows, wide-angle composition. Photorealistic.`;
@@ -462,7 +465,7 @@ function setVgenHint(msg) {
 
 function buildVideoPrompt() {
   const location = S.txtLocation.trim();
-  return `Cinematic wide establishing shot. ${S.txtFurniture.trim() || 'A street furniture piece'} installed in ${location || 'an urban environment'}. Camera slowly pans across the scene. Pedestrians and passersby move naturally in the background, small in frame. Warm natural daylight, realistic outdoor setting, architectural visualization style, no close-up faces.`;
+  return `Cinematic wide establishing shot. ${S.txtFurniture.trim() || 'A street furniture piece'} installed in ${location || 'an urban environment'}. Camera slowly pans across the scene. Pedestrians and passersby move naturally in the background, small in frame. Warm natural daylight, realistic outdoor setting, architectural visualization style, no close-up faces. If any speech or conversation is heard, use natural everyday Taiwan Mandarin — the kind spoken by ordinary people in Taiwan in daily life, neither accented nor formal.`;
 }
 
 async function pollVeo(operationName) {
