@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <title>街道家具設計視覺化</title>
+  <title>街道家具設計視覺化（含影片）</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -202,7 +202,6 @@
       <p class="screen-sub">你的街道家具設計提案</p>
     </div>
 
-    <!-- 圖片 + 影片並排容器 -->
     <div id="result-media" class="result-media">
 
       <div class="result-media-col">
@@ -225,7 +224,6 @@
 
     <div id="result-tags" class="result-tags"></div>
 
-    <!-- 主要 CTA：生成影片 → 完成後換成上傳作品 -->
     <div id="result-video-action" class="result-main-action">
       <button class="btn-video btn-xl" id="btn-gen-video">🎬&nbsp; 生成影片</button>
     </div>
@@ -233,7 +231,6 @@
       <button class="btn-upload btn-xl" id="btn-upload-work">📤&nbsp; 上傳作品</button>
     </div>
 
-    <!-- 次要功能：小字按鈕 -->
     <div class="result-secondary">
       <button class="btn-sm-ghost" id="btn-download">⬇️ 下載圖片</button>
       <button class="btn-sm-ghost hidden" id="btn-dl-video">⬇️ 下載影片</button>
@@ -273,7 +270,7 @@
 
 </div><!-- /#app -->
 
-<script>const VIDEO_ENABLED = false;</script>
+<script>const VIDEO_ENABLED = true;</script>
 <script src="config.js"></script>
 <script src="app.js"></script>
 </body>

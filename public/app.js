@@ -347,9 +347,14 @@ function renderResult() {
   // Reset video section for new generations
   $('result-video-col').classList.add('hidden');
   $('result-media').classList.remove('has-video');
-  $('result-video-action').classList.remove('hidden');
-  $('result-upload-row').classList.add('hidden');
   $('btn-dl-video').classList.add('hidden');
+  if (VIDEO_ENABLED) {
+    $('result-video-action').classList.remove('hidden');
+    $('result-upload-row').classList.add('hidden');
+  } else {
+    $('result-video-action').classList.add('hidden');
+    $('result-upload-row').classList.remove('hidden');
+  }
 
   showScreen('result');
 }
@@ -632,9 +637,14 @@ function resetApp() {
 
   [1, 2, 3].forEach(n => setStep(n, 'waiting'));
 
-  $('result-video-action').classList.remove('hidden');
-  $('result-upload-row').classList.add('hidden');
   $('btn-dl-video').classList.add('hidden');
+  if (VIDEO_ENABLED) {
+    $('result-video-action').classList.remove('hidden');
+    $('result-upload-row').classList.add('hidden');
+  } else {
+    $('result-video-action').classList.add('hidden');
+    $('result-upload-row').classList.remove('hidden');
+  }
 
   showScreen('upload');
 }
