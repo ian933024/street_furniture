@@ -482,12 +482,12 @@ async function pollVeo(operationName) {
       const samples = data.response?.generateVideoResponse?.generatedSamples;
       const uri = samples?.[0]?.video?.uri;
       if (!uri) {
-        // Safety filter: samples array exists but video is null/blocked
-        if (Array.isArray(samples) && samples.length > 0 && !samples[0]?.video?.uri) {
+        if (Array.isArray(samples) && samples.length > 0) {
           throw new Error('影片被 Veo 安全過濾器封鎖。請嘗試修改設計描述，或確認圖片中沒有人臉特寫。');
         }
-        // Empty samples — generation failed silently
-        throw new Error(`影片生成失敗（回應格式異常）。請開啟開發者工具查看 Console 中的 [Veo done] 訊息並回報。`);
+        // Show actual response so user can report it
+        const preview = JSON.stringify(data).substring(0, 400);
+        throw new Error(`回應格式異常，請截圖此訊息回報：${preview}`);
       }
       return uri;
     }
